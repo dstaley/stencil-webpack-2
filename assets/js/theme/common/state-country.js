@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import utils from '@bigcommerce/stencil-utils';
-import _ from 'lodash';
+import transform from 'lodash-es/transform';
+import isEmpty from 'lodash-es/isEmpty';
+import each from 'lodash-es/each';
 import { insertStateHiddenField } from './form-utils';
 
 /**
@@ -8,7 +10,7 @@ import { insertStateHiddenField } from './form-utils';
  * @returns {jQuery|HTMLElement}
  */
 function makeStateRequired(stateElement, context) {
-    const attrs = _.transform(stateElement.prop('attributes'), (result, item) => {
+    const attrs = transform(stateElement.prop('attributes'), (result, item) => {
         const ret = result;
         ret[item.name] = item.value;
         return ret;
@@ -46,7 +48,7 @@ function makeStateRequired(stateElement, context) {
  * In this case we need to be able to switch to an input field and hide the required field
  */
 function makeStateOptional(stateElement) {
-    const attrs = _.transform(stateElement.prop('attributes'), (result, item) => {
+    const attrs = transform(stateElement.prop('attributes'), (result, item) => {
         const ret = result;
         ret[item.name] = item.value;
 
@@ -85,8 +87,8 @@ function addOptions(statesArray, $selectElement, options) {
 
     container.push(`<option value="">${statesArray.prefix}</option>`);
 
-    if (!_.isEmpty($selectElement)) {
-        _.each(statesArray.states, (stateObj) => {
+    if (!isEmpty($selectElement)) {
+        each(statesArray.states, (stateObj) => {
             if (options.useIdForStates) {
                 container.push(`<option value="${stateObj.id}">${stateObj.name}</option>`);
             } else {
@@ -136,7 +138,7 @@ export default function (stateElement, context = {}, options, callback) {
 
             const $currentInput = $('[data-field-type="State"]');
 
-            if (!_.isEmpty(response.data.states)) {
+            if (!isEmpty(response.data.states)) {
                 // The element may have been replaced with a select, reselect it
                 const $selectElement = makeStateRequired($currentInput, context);
 

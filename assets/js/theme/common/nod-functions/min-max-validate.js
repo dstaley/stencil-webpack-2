@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isNaN from 'lodash-es/isNaN';
 import $ from 'jquery';
 
 function minMaxValidate(minInputSelector, maxInputSelector) {
@@ -6,7 +6,7 @@ function minMaxValidate(minInputSelector, maxInputSelector) {
         const minValue = parseFloat($(minInputSelector).val());
         const maxValue = parseFloat($(maxInputSelector).val());
 
-        if (maxValue > minValue || _.isNaN(maxValue) || _.isNaN(minValue)) {
+        if (maxValue > minValue || isNaN(maxValue) || isNaN(minValue)) {
             return cb(true);
         }
 

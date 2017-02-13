@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import map from 'lodash-es/map';
 
 function decrementCounter(counter, item) {
     const index = counter.indexOf(item);
@@ -32,7 +32,7 @@ export default function (urlContext) {
     const $compareLink = $('a[data-compare-nav]');
 
     if ($checked.length !== 0) {
-        products = _.map($checked, (element) => element.value);
+        products = map($checked, (element) => element.value);
 
         updateCounterNav(products, $compareLink, urlContext);
     }

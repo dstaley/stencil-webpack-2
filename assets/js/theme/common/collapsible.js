@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import extend from 'lodash-es/extend';
 import mediaQueryListFactory from './media-query-list';
 
 const PLUGIN_KEY = 'collapsible';
@@ -233,7 +233,7 @@ export default function collapsibleFactory(selector = `[data-${PLUGIN_KEY}]`, ov
                             $toggle.data(`${PLUGIN_KEY}-target`) ||
                             $toggle.attr('href')
                         );
-        const options = _.extend(optionsFromData($toggle), overrideOptions);
+        const options = extend(optionsFromData($toggle), overrideOptions);
         const collapsible = new Collapsible($toggle, $(targetId), options);
 
         $toggle.data(instanceKey, collapsible);

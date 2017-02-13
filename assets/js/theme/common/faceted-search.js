@@ -1,6 +1,9 @@
 import { hooks, api } from '@bigcommerce/stencil-utils';
 import $ from 'jquery';
-import _ from 'lodash';
+import extend from 'lodash-es/extend';
+import without from 'lodash-es/without';
+import union from 'lodash-es/union';
+import includes from 'lodash-es/includes';
 import Url from 'url';
 import urlUtils from './url-utils';
 import modalFactory from '../global/modal';
@@ -53,7 +56,7 @@ class FacetedSearch {
         // Private properties
         this.requestOptions = requestOptions;
         this.callback = callback;
-        this.options = _.extend({}, defaultOptions, options);
+        this.options = extend({}, defaultOptions, options);
         this.collapsedFacets = [];
         this.collapsedFacetItems = [];
 
@@ -138,7 +141,7 @@ class FacetedSearch {
         const id = $navList.attr('id');
 
         // Remove
-        this.collapsedFacetItems = _.without(this.collapsedFacetItems, id);
+        this.collapsedFacetItems = without(this.collapsedFacetItems, id);
     }
 
     collapseFacetItems($navList) {
@@ -146,9 +149,9 @@ class FacetedSearch {
         const hasMoreResults = $navList.data('has-more-results');
 
         if (hasMoreResults) {
-            this.collapsedFacetItems = _.union(this.collapsedFacetItems, [id]);
+            this.collapsedFacetItems = union(this.collapsedFacetItems, [id]);
         } else {
-            this.collapsedFacetItems = _.without(this.collapsedFacetItems, id);
+            this.collapsedFacetItems = without(this.collapsedFacetItems, id);
         }
     }
 
@@ -156,7 +159,7 @@ class FacetedSearch {
         const id = $navList.attr('id');
 
         // Toggle depending on `collapsed` flag
-        if (_.contains(this.collapsedFacetItems, id)) {
+        if (includes(this.collapsedFacetItems, id)) {
             this.getMoreFacetResults($navList);
 
             return true;
@@ -266,7 +269,7 @@ class FacetedSearch {
         $navLists.each((index, navList) => {
             const $navList = $(navList);
             const id = $navList.attr('id');
-            const shouldCollapse = _.contains(this.collapsedFacetItems, id);
+            const shouldCollapse = includes(this.collapsedFacetItems, id);
 
             if (shouldCollapse) {
                 this.collapseFacetItems($navList);
@@ -283,7 +286,7 @@ class FacetedSearch {
             const $accordionToggle = $(accordionToggle);
             const collapsible = $accordionToggle.data('collapsible-instance');
             const id = collapsible.targetId;
-            const shouldCollapse = _.contains(this.collapsedFacets, id);
+            const shouldCollapse = includes(this.collapsedFacets, id);
 
             if (shouldCollapse) {
                 this.collapseFacet($accordionToggle);
@@ -397,9 +400,9 @@ class FacetedSearch {
         const id = collapsible.targetId;
 
         if (collapsible.isCollapsed) {
-            this.collapsedFacets = _.union(this.collapsedFacets, [id]);
+            this.collapsedFacets = union(this.collapsedFacets, [id]);
         } else {
-            this.collapsedFacets = _.without(this.collapsedFacets, id);
+            this.collapsedFacets = without(this.collapsedFacets, id);
         }
     }
 }

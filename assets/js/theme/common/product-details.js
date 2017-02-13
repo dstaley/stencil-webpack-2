@@ -7,7 +7,10 @@ import 'foundation-sites/js/foundation/foundation';
 import 'foundation-sites/js/foundation/foundation.reveal';
 import ImageGallery from '../product/image-gallery';
 import modalFactory from '../global/modal';
-import _ from 'lodash';
+import isEmpty from 'lodash-es/isEmpty';
+import isObject from 'lodash-es/isObject';
+import isPlainObject from 'lodash-es/isPlainObject';
+import isNumber from 'lodash-es/isNumber';
 
 // We want to ensure that the events are bound to a single instance of the product details component
 let previewModal = null;
@@ -39,7 +42,7 @@ export default class Product {
         const hasOptions = $productOptionsElement.html().trim().length;
 
         // Update product attributes. If we're in quick view and the product has options, then also update the initial view in case items are oos
-        if (_.isEmpty(productAttributesData) && hasOptions) {
+        if (isEmpty(productAttributesData) && hasOptions) {
             const $productId = $('[name="product_id"]', $form).val();
 
             utils.api.productAttributes.optionChange($productId, $form.serialize(), (err, response) => {
@@ -110,7 +113,7 @@ export default class Product {
     }
 
     showProductImage(image) {
-        if (_.isPlainObject(image)) {
+        if (isPlainObject(image)) {
             const zoomImageUrl = utils.tools.image.getSrc(
                 image.data,
                 this.context.themeSettings.zoom_size
@@ -325,11 +328,11 @@ export default class Product {
 
         this.showMessageBox(data.stock_message || data.purchasing_message);
 
-        if (_.isObject(data.price)) {
+        if (isObject(data.price)) {
             this.updatePriceView(viewModel, data.price);
         }
 
-        if (_.isObject(data.weight)) {
+        if (isObject(data.weight)) {
             viewModel.$weight.html(data.weight.formatted);
         }
 
@@ -344,7 +347,7 @@ export default class Product {
         }
 
         // if stock view is on (CP settings)
-        if (viewModel.stock.$container.length && _.isNumber(data.stock)) {
+        if (viewModel.stock.$container.length && isNumber(data.stock)) {
             // if the stock container is hidden, show
             viewModel.stock.$container.removeClass('u-hiddenVisually');
 

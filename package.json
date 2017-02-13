@@ -40,6 +40,7 @@
     "karma-webpack": "^2.0.2",
     "load-grunt-config": "0.17.1",
     "lodash": "^3.5.0",
+    "lodash-es": "^4.17.4",
     "nod-validate": "^2.0.12",
     "pace": "hubspot/pace#a03f1f1de62c9cea6c88b2267b8d7a83858b6cb6",
     "slick-carousel": "1.5.5",

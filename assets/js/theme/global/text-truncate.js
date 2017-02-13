@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import forOwn from 'lodash-es/forOwn';
 
 export default class TextTruncate {
     constructor($element) {
@@ -77,7 +77,7 @@ export default class TextTruncate {
 
     parseDataAttributes() {
         // override default css options
-        _.forOwn(this.defaultCssOptions, (value, key) => {
+        forOwn(this.defaultCssOptions, (value, key) => {
             this.$element.css(key, value);
         });
     }

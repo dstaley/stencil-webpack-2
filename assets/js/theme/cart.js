@@ -1,6 +1,7 @@
 import PageManager from '../page-manager';
 import $ from 'jquery';
-import _ from 'lodash';
+import bind from 'lodash-es/bind';
+import debounce from 'lodash-es/debounce';
 import giftCertCheck from './common/gift-certificate-validator';
 import utils from '@bigcommerce/stencil-utils';
 import ShippingEstimator from './cart/shipping-estimator';
@@ -147,8 +148,8 @@ export default class Cart extends PageManager {
 
     bindCartEvents() {
         const debounceTimeout = 400;
-        const cartUpdate = _.bind(_.debounce(this.cartUpdate, debounceTimeout), this);
-        const cartRemoveItem = _.bind(_.debounce(this.cartRemoveItem, debounceTimeout), this);
+        const cartUpdate = bind(debounce(this.cartUpdate, debounceTimeout), this);
+        const cartRemoveItem = bind(debounce(this.cartRemoveItem, debounceTimeout), this);
 
         // cart update
         $('[data-cart-update]', this.$cartContent).on('click', (event) => {

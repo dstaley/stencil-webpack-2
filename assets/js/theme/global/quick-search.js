@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import debounce from 'lodash-es/debounce';
 import utils from '@bigcommerce/stencil-utils';
 import StencilDropDown from './stencil-dropdown';
 
@@ -30,7 +30,7 @@ export default function () {
     };
 
     // stagger searching for 200ms after last input
-    const doSearch = _.debounce((searchQuery) => {
+    const doSearch = debounce((searchQuery) => {
         utils.api.search.search(searchQuery, { template: 'search/quick-results' }, (err, response) => {
             if (err) {
                 return false;

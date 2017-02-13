@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import includes from 'lodash-es/includes';
+import camelCase from 'lodash-es/camelCase';
+import capitalize from 'lodash-es/capitalize';
 import nod from './nod';
 import forms from './models/forms';
 
@@ -27,12 +29,12 @@ function classifyInput(input, formFieldClass) {
     if (tagName === 'input') {
         const inputType = $input.prop('type');
 
-        if (_.contains(['radio', 'checkbox', 'submit'], inputType)) {
+        if (includes(['radio', 'checkbox', 'submit'], inputType)) {
             // ie: .form-field--checkbox, .form-field--radio
-            className = `${formFieldClass}--${_.camelCase(inputType)}`;
+            className = `${formFieldClass}--${camelCase(inputType)}`;
         } else {
             // ie: .form-field--input .form-field--inputText
-            specificClassName = `${className}${_.capitalize(inputType)}`;
+            specificClassName = `${className}${capitalize(inputType)}`;
         }
     }
 

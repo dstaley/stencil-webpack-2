@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'jquery-zoom';
-import _ from 'lodash';
+import clone from 'lodash-es/clone';
 
 export default class ImageGallery {
 
@@ -16,7 +16,7 @@ export default class ImageGallery {
     }
 
     setMainImage(imgObj) {
-        this.currentImage = _.clone(imgObj);
+        this.currentImage = clone(imgObj);
 
         this.destroyImageZoom();
         this.setActiveThumb();
