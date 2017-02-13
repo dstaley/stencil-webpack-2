@@ -1,73 +1,56 @@
 import 'babel-polyfill';
 
-import $ from 'jquery';
 import async from 'async';
-import account from './theme/account';
-import auth from './theme/auth';
-import blog from './theme/blog';
-import brand from './theme/brand';
-import cart from './theme/cart';
-import category from './theme/category';
-import contactUs from './theme/contact-us';
-import compare from './theme/compare';
-import errors from './theme/errors';
-import errors404 from './theme/404-error';
-import giftCertificate from './theme/gift-certificate';
 import global from './theme/global';
-import home from './theme/home';
-import orderComplete from './theme/order-complete';
-import rss from './theme/rss';
-import page from './theme/page';
-import product from './theme/product';
-import search from './theme/search';
-import sitemap from './theme/sitemap';
-import subscribe from './theme/subscribe';
-import wishlist from './theme/wishlist';
+
+const scriptURL = document.currentScript.src;
+// eslint-disable-next-line camelcase, no-undef
+__webpack_public_path__ = scriptURL.slice(0, scriptURL.lastIndexOf('/') + 1);
 
 const PageClasses = {
     mapping: {
-        'pages/account/orders/all': account,
-        'pages/account/orders/details': account,
-        'pages/account/addresses': account,
-        'pages/account/add-address': account,
-        'pages/account/add-return': account,
-        'pages/account/add-wishlist': wishlist,
-        'pages/account/recent-items': account,
-        'pages/account/download-item': account,
-        'pages/account/edit': account,
-        'pages/account/inbox': account,
-        'pages/account/return-saved': account,
-        'pages/account/returns': account,
-        'pages/auth/login': auth,
-        'pages/auth/account-created': auth,
-        'pages/auth/create-account': auth,
-        'pages/auth/new-password': auth,
-        'pages/auth/forgot-password': auth,
-        'pages/blog': blog,
-        'pages/blog-post': blog,
-        'pages/brand': brand,
-        'pages/brands': brand,
-        'pages/cart': cart,
-        'pages/category': category,
-        'pages/compare': compare,
-        'pages/contact-us': contactUs,
-        'pages/errors': errors,
-        'pages/errors/404': errors404,
-        'pages/gift-certificate/purchase': giftCertificate,
-        'pages/gift-certificate/balance': giftCertificate,
-        'pages/gift-certificate/redeem': giftCertificate,
+        'pages/account/orders/all': () => System.import('./theme/account'),
+        'pages/account/orders/details': () => System.import('./theme/account'),
+        'pages/account/addresses': () => System.import('./theme/account'),
+        'pages/account/add-address': () => System.import('./theme/account'),
+        'pages/account/add-return': () => System.import('./theme/account'),
+        'pages/account/add-wishlist': () => System.import('./theme/wishlist'),
+        'pages/account/recent-items': () => System.import('./theme/account'),
+        'pages/account/download-item': () => System.import('./theme/account'),
+        'pages/account/edit': () => System.import('./theme/account'),
+        'pages/account/inbox': () => System.import('./theme/account'),
+        'pages/account/return-saved': () => System.import('./theme/account'),
+        'pages/account/returns': () => System.import('./theme/account'),
+        'pages/auth/login': () => System.import('./theme/auth'),
+        'pages/auth/account-created': () => System.import('./theme/auth'),
+        'pages/auth/create-account': () => System.import('./theme/auth'),
+        'pages/auth/new-password': () => System.import('./theme/auth'),
+        'pages/auth/forgot-password': () => System.import('./theme/auth'),
+        'pages/blog': () => System.import('./theme/blog'),
+        'pages/blog-post': () => System.import('./theme/blog'),
+        'pages/brand': () => System.import('./theme/brand'),
+        'pages/brands': () => System.import('./theme/brand'),
+        'pages/cart': () => System.import('./theme/cart'),
+        'pages/category': () => System.import('./theme/category'),
+        'pages/compare': () => System.import('./theme/compare'),
+        'pages/contact-us': () => System.import('./theme/contact-us'),
+        'pages/errors': () => System.import('./theme/errors'),
+        'pages/errors/404': () => System.import('./theme/404-error'),
+        'pages/gift-certificate/purchase': () => System.import('./theme/gift-certificate'),
+        'pages/gift-certificate/balance': () => System.import('./theme/gift-certificate'),
+        'pages/gift-certificate/redeem': () => System.import('./theme/gift-certificate'),
         // eslint-disable-next-line
         'global': global,
-        'pages/home': home,
-        'pages/order-complete': orderComplete,
-        'pages/page': page,
-        'pages/product': product,
-        'pages/search': search,
-        'pages/rss': rss,
-        'pages/sitemap': sitemap,
-        'pages/subscribed': subscribe,
-        'pages/account/wishlist-details': wishlist,
-        'pages/account/wishlists': wishlist,
+        'pages/home': () => System.import('./theme/home'),
+        'pages/order-complete': () => System.import('./theme/order-complete'),
+        'pages/page': () => System.import('./theme/page'),
+        'pages/product': () => System.import('./theme/product'),
+        'pages/search': () => System.import('./theme/search'),
+        'pages/rss': () => System.import('./theme/rss'),
+        'pages/sitemap': () => System.import('./theme/sitemap'),
+        'pages/subscribed': () => System.import('./theme/subscribe'),
+        'pages/account/wishlist-details': () => System.import('./theme/wishlist'),
+        'pages/account/wishlists': () => System.import('./theme/wishlist'),
     },
     /**
      * Getter method to ensure a good page type is accessed.
@@ -140,18 +123,20 @@ window.stencilBootstrap = function stencilBootstrap(templateFile, contextJSON = 
 
     return {
         load() {
-            $(() => {
-                const PageTypeFn = pages.get(templateFile); // Finds the appropriate module from the pageType object and store the result as a function.
+            document.addEventListener('DOMContentLoaded', () => {
+                const pageTypePromise = pages.get(templateFile);
+                if (pageTypePromise !== false) {
+                    pageTypePromise().then(PageTypeFn => {
+                        // eslint-disable-next-line new-cap
+                        const pageType = new PageTypeFn.default(context);
 
-                if (PageTypeFn) {
-                    const pageType = new PageTypeFn(context);
+                        pageType.context = context;
 
-                    pageType.context = context;
-
-                    return loader(pageType, pages);
+                        return loader(pageType, pages);
+                    });
+                } else {
+                    throw new Error(`${templateFile} Module not found`);
                 }
-
-                throw new Error(`${templateFile} Module not found`);
             });
         },
     };
