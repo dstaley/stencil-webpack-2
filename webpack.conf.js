@@ -7,7 +7,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'babel',
+                loader: 'babel-loader',
                 include: /(assets\/js|assets\\js|node_modules\/@bigcommerce\/stencil-utils|node_modules\\@bigcommerce\\stencil-utils)/,
                 query: {
                     compact: false,

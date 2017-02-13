@@ -6,8 +6,8 @@ var bundleLocation = 'assets/js/bundle.js';
 webpackConfig.context = __dirname;
 webpackConfig.entry = './assets/js/app.js';
 webpackConfig.output = {
-    path: __dirname + '/assets/js',
-    filename: 'bundle.js'
+    path: __dirname + '/assets/js/bundles',
+    filename: '[name].js'
 };
 
 /**
@@ -35,6 +35,7 @@ var watchOptions = {
  * @param {Object} Bs
  */
 function development(Bs) {
+    delete global.System;
     var compiler = webpack(webpackConfig);
 
     // Rebuild the bundle once at bootup
